@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+    <link rel="icon" href="assets/favicon.svg"/>
+    <title>Офтальмоонкология в России 🥼</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-position: bottom;
+            background-image: url('/assets/background.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            background-color: #bfcfde;
+            /* Центрирование */
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 810px;
+            /* Без центрирования */
+            /*margin: 30px;*/
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            flex: 1;
+            box-sizing: border-box;
+            margin: 10px;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 16px;
+            border: 1px solid #ccc;
+            /*border-radius: 0px;*/
+            background-color: #f9f9f9;
+        }
+
+        .result {
+            width: 96%;
+            /*padding: 10px;*/
+            border: 2px solid #ccc;
+            /*border-radius: 4px;*/
+            background-color: #e9eff6;
+            text-align: center;
+            /*margin: 20px 10px 10px;*/
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .options {
+            display: flex;
+            justify-content: flex-start;
+            /*width: 100px;*/
+        }
+
+        .options label {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        .error-message {
+            color: #607288;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            width: 97.5%;
+            padding: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            background-color: #95abc3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #7d9bb7;
+        }
+
+        button:disabled {
+            background-color: #f9f9f9;
+        }
+
+        .floating-button {
+            /*width: 97.5%;*/
+            padding: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            background-color: #95abc3;
+            color: #fff;
+            border: 4px #95abc3;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 45px;
+            z-index: 1000;
+        }
+
+        .floating-button:hover {
+            background-color: #7d9bb7;
+        }
+
+        /* Стили для таблицы с расшифровкой прогнозов */
+        .table {
+            font-size: 16px;
+            width: 97%;
+            /*margin-bottom: 20px;*/
+            border: 2px solid #dddddd;
+            border-collapse: collapse;
+            /*border-radius: 8px;*/
+            /*position: center;*/
+            margin: 10px;
+        }
+        .table th {
+            font-weight: 500;
+            padding: 4px;
+            background: #e9eff6;
+            border: 2px solid #dddddd;
+        }
+        .table td {
+            border: 2px solid #dddddd;
+            padding: 5px;
+        }
+
+        .result-p {
+            font-weight: 600;
+        }
+
+        /* Стили для ввода данных пациента */
+        .input-patient {
+            font-size: 16px;
+            min-width: 300px;
+        }
+
+        .ocular {
+            position: absolute;
+            width: 400px;
+            left: 35px;
+            top: 25px;
+        }
+
+        /* Таблица для мобильных устройств */
+        .result-table-mobile {
+            display: none;
+        }
+
+        /* Таблица для большого десктоп */
+        .result-table {
+            display: table;
+        }
+
+        /* Стили для мобильных и планшет устройств */
+        @media (max-width: 760px) {
+            .wrap {
+                border-radius: 5px;
+                margin-top: 18px;
+                margin-bottom: 20px;
+                width: auto;
+                max-width: 340px;
+                padding: 5px;
+                background-color: rgba(255, 255, 255, 1);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                font-size: 13px;
+            }
+            .container {
+                display: block;
+            }
+            .question {
+                border: 1px solid #ccc;
+                padding: 10px 5px 5px 10px;
+            }
+            .input-patient {
+                font-size: 12px;
+                margin-bottom: 8px;
+                min-width: 280px;
+            }
+            label {
+                margin-bottom: 6px;
+            }
+            .question label {
+                font-size: 12px;
+            }
+            .options label {
+                font-size: 12px;
+            }
+            .ocular {
+                display: none;
+            }
+            h3 {
+                text-align: center;
+                margin: 8px auto 8px;
+                font-size: 13px;
+                font-weight: 300;
+                display: block;
+                max-width: 80%;
+            }
+            button {
+                display: block;
+                padding: 6px;
+                border-radius: 4px;
+                font-size: 13px;
+                width: 94%;
+                margin: 12px auto;
+            }
+            .floating-button {
+                display: none;
+            }
+            .error-message {
+                margin-top: 2px;
+                margin-bottom: 2px;
+                font-size: 12px;
+            }
+            body {
+                height: auto;
+            }
+
+            .result {
+                display: block;
+                width: 93%;
+                border: 2px solid #ccc;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 12px;
+            }
+            .result-table {
+                display: none;
+            }
+            .result-table-mobile {
+                display: table;
+                font-size: inherit;
+                border: 1px solid #dddddd;
+                width: 320px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .result-p {
+                font-size: 12px;
+            }
+
+            /* Кнопка администратора */
+            .floating-button {
+                display: block;
+                font-size: 14px;
+                padding: 6px;
+                max-width: 35px;
+                right: 30px;
+                bottom: 80px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Стили для десктоп */
+        @media (max-width: 1920px) {
+            .wrap {
+                font-size: 14px;
+                width: inherit;
+                /*margin-top: 10px;*/
+            }
+            label {
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+            input {
+                font-size: 14px;
+            }
+            .input-patient {
+                font-size: 14px;
+            }
+            button {
+                font-size: 14px;
+            }
+            .question {
+                margin-bottom: 8px;
+                padding: 8px 8px 8px 14px;
+            }
+            .section {
+                margin: 8px 6px;
+            }
+            h3 {
+                margin-bottom: 12px;
+            }
+            .options {
+                font-size: 14px;
+            }
+            .options label {
+                font-size: 14px;
+            }
+            .error-message {
+                font-size: 13px;
+                margin-top: 0;
+
+            }
+            .input-patient {
+                margin-bottom: 8px;
+                max-width: 270px;
+            }
+            .ocular {
+                width: 320px;
+                left: 6px;
+                top: -4px;
+            }
+        }
+
+        /* Отображает глаз для устройств */
+        @media (max-width: 1380px) {
+            .ocular {
+                width: 280px;
+                left: 0;
+            }
+        }
+        /* Отображает глаз для устройств */
+        @media (max-width: 1270px) {
+            .ocular {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap" id="wrap">
+    <img class="ocular" src="assets/ocular.svg">
+
+    <h3>Определение риска метастазирования увеальной меланомы</h3>
+
+    <form target="_blank" action="" onsubmit="handleForm(event)">
+        <div class="container" id="container-patient">
+
+            <div class="section">
+                <div class="question">
+                    <label>Ваше ФИО</label>
+
+                    <div class="options">
+                        <input class="input-patient" type="text" id="patient-name" placeholder="...">
+                    </div>
+                    <div class="error-message">Пожалуйста, заполните ФИО</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="question">
+                    <label>Дата рождения</label>
+
+                    <div class="options">
+                        <input class="input-patient" type="date" id="patient-birth">
+                    </div>
+                    <div class="error-message">Пожалуйста, заполните дату рождения</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container" id="container-questions">
+            {{$number := 0}}
+
+            {{range .Sections}}
+
+                <div class="section">
+                    {{range .Questions}}
+                        <div class="question">
+                            <label>{{$number = Inc $number}}{{$questionLabel := .Label}}{{$number}}) {{$questionLabel}}</label>
+                            <div class="options">
+                                {{range .Choises}}
+                                    <label><input type="radio" name="{{$questionLabel}}" value="{{.Value}}">{{.Label}}</label>
+                                {{end}}
+                            </div>
+                            <div class="error-message">Пожалуйста, выберите один из вариантов</div>
+                        </div>
+                    {{end}}
+                </div>
+
+            {{end}}
+
+        </div>
+
+        <button type="submit" id="submit">Отправить 🔬‍</button>
+
+    </form>
+
+    <button class="floating-button" onclick="handleFloatingButton()">🥼</button>
+
+</div>
+
+<script>
+    const RESULT_POSITIVE = "БЛАГОПРИЯТНЫЙ"
+    const RESULT_NEUTRAL = "СРЕДНИЙ"
+    const RESULT_NEGATIVE = "НЕБЛАГОПРИЯТНЫЙ"
+
+    function validateForm() {
+        let patient = validatePatient()
+        let questions = validateQuestions()
+
+        return patient && questions
+    }
+
+    function validatePatient() {
+        let patient = document.getElementById('container-patient')
+        let fields = patient.querySelectorAll('input')
+
+        let errorMessages = patient.querySelectorAll('div[class="error-message"]')
+        let index = 0
+
+        let formIsValid = true
+
+        fields.forEach(function (field) {
+            let errorMessage = errorMessages[index]
+            errorMessage.style.display = 'none'
+
+            if (field.value === null || field.value === "") {
+                errorMessage.style.display = 'block'
+                formIsValid = false
+            }
+            index++
+        })
+
+        return formIsValid
+    }
+
+    function validateQuestions() {
+        let questions = document.
+            querySelector('div[id="container-questions"]').
+            querySelectorAll('div[class="question"]')
+
+        let formIsValid = true
+
+        questions.forEach(function (question) {
+            let errorMessage = question.querySelector(
+                'div[class="error-message"]'
+            )
+            let questionIsValid = false
+
+            let radios = question.
+                querySelectorAll('input[type="radio"]')
+
+            radios.forEach(function (radio) {
+                if (radio.checked) {
+                    questionIsValid = true
+                }
+            })
+
+            errorMessage.style.display = 'none'
+
+            if (!questionIsValid) {
+                errorMessage.style.display = 'block'
+                formIsValid = false
+            }
+        })
+
+        return formIsValid
+    }
+
+    function calculateScore() {
+        let questions = document.
+            querySelector('div[id="container-questions"]').
+            querySelectorAll('div[class="question"]')
+
+        let score = 0.0
+
+        questions.forEach(function (question) {
+            let radios = question.querySelectorAll(
+                'input[type="radio"]'
+            )
+
+            radios.forEach(function (radio) {
+                if (radio.checked) {
+                    score += parseFloat(radio.value)
+                }
+            })
+        })
+
+        return score
+    }
+
+
+    function obtainPatient() {
+        let container = document.getElementById('container-patient')
+
+        return {
+            "name": container.querySelector('input[id="patient-name"]').value,
+            "birth": container.querySelector('input[id="patient-birth"]').value,
+        }
+    }
+
+    function makeResult(score) {
+        if (score <= 3) {
+            return RESULT_POSITIVE
+        }
+        if (score >= 4 && score <= 6) {
+            return RESULT_NEUTRAL
+        }
+        return RESULT_NEGATIVE
+    }
+
+    function makePrognosisTable(result) {
+        let rows = ''
+
+        switch (result) {
+            case RESULT_POSITIVE:
+                rows = `
+                    <tr>
+                       <td>Благоприятный</td>
+                       <td>96%</td>
+                       <td>96%</td>
+                    </tr>
+                `
+                break
+            case RESULT_NEUTRAL:
+                rows = `
+                    <tr>
+                       <td>Средний</td>
+                       <td>64%</td>
+                       <td>55%</td>
+                    </tr>
+                `
+                break
+            case RESULT_NEGATIVE:
+                rows = `
+                   <tr>
+                       <td>Неблагоприятный</td>
+                       <td>39%</td>
+                       <td>26%</td>
+                   </tr>
+                `
+        }
+
+        return `
+            <table class="table table-bordered result-table result-table-mobile">
+                  <thead>
+                      <tr>
+                          <th>Прогноз / Выживаемость</th>
+                          <th>3-летняя</th>
+                          <th>5-летняя</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                        ${rows}
+                  </tbody>
+            </table>
+        `
+    }
+
+    async function makePrognosis() {
+        let patient = obtainPatient()
+
+        let score = calculateScore()
+        let result = makeResult(score)
+
+        try {
+            let resp = await fetch("/prognosis/create", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "score": score,
+                        "result": result,
+                        "patient": patient,
+                    })
+            })
+
+            if (!resp.ok) {
+                console.error(`/prognosis/create: response status: ${resp.status}`)
+            }
+
+            return await resp.json()
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function handleForm(event) {
+        event.preventDefault();
+
+        if (!validateForm()) {
+            return false
+        }
+
+        let resp = await makePrognosis()
+
+        let result = resp['prognosis']['result']
+
+        let submit = document.getElementById("submit")
+
+        submit.insertAdjacentHTML('afterend', `
+            <div class="result" >
+                <p class="result-p">Прогноз: ${result}</p>
+            </div>
+
+            ${makePrognosisTable(result)}
+        `)
+
+        submit.remove()
+
+        return true
+    }
+
+    async function handleFloatingButton() {
+        window.location.href = '/admin'
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+# Секции опроса пациента
+sections:
+
+  # Первая секция вопросов
+  - questions:
+
+    - label: "Стадия по TNM"
+      choises:
+        - label: "Т1"
+          value: +1
+        - label: "T2"
+          value: +2
+        - label: "T3"
+          value: +2.5
+        - label: "T4"
+          value: +3
+
+    - label: "Инвазия в цилиарное тело"
+      choises:
+        - label: "Да"
+          value: +2
+        - label: "Нет"
+          value: 0
+
+    - label: "Экстраокулярный рост"
+      choises:
+        - label: "Да"
+          value: +1
+        - label: "Нет"
+          value: 0
+
+    - label: "Эпителиоидноклеточный тип"
+      choises:
+        - label: "Да"
+          value: +2
+        - label: "Нет"
+          value: 0
+
+  # Вторая секция вопросов
+  - questions:
+
+    - label: "Мутация в гене EIF1AX"
+      choises:
+        - label: "Да"
+          value: -4
+        - label: "Нет"
+          value: 0
+
+    - label: "Мутация в гене SF3B1"
+      choises:
+        - label: "Да"
+          value: +1
+        - label: "Нет"
+          value: 0
+
+    - label: "Делеция гена PPARG / делеция 3р"
+      choises:
+        - label: "Да"
+          value: +2
+        - label: "Нет"
+          value: 0
+
+    - label: "Амплификация гена МУС / амплификация 8q"
+      choises:
+        - label: "Да"
+          value: +1.5
+        - label: "Нет"
+          value: 0
