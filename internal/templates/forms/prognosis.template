@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="assets/favicon.svg"/>
+    <title>Опрос пациента</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/background.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            background-color: #bfcfde;
+            /* Центрирование */
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 800px;
+            /* Без центрирования */
+            /*margin: 30px;*/
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            flex: 1;
+            box-sizing: border-box;
+            margin: 10px;
+        }
+
+        h3 {
+            text-align: center;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .result {
+            width: 94%;
+            padding: 10px;
+            margin: 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #eeeeee;
+            text-align: center;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            width: 100px;
+        }
+
+        .options label {
+            font-size: 14px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .error-message {
+            color: #607288;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        button {
+            width: 97.5%;
+            padding: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            background-color: #95abc3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #7d9bb7;
+        }
+
+        button:disabled {
+            background-color: #f9f9f9;
+        }
+
+        .floating-button {
+            /*width: 97.5%;*/
+            padding: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            background-color: #95abc3;
+            color: #fff;
+            border: 4px #95abc3;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 45px;
+            z-index: 1000;
+        }
+
+        .floating-button:hover {
+            background-color: #7d9bb7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap" id="wrap">
+    <h3>Опрос пациента 🏥</h3>
+
+    <form target="_blank" action="" onsubmit="processForm(event)">
+
+        <div class="container">
+            {{$number := 0}}
+
+            {{range .Sections}}
+
+                <div class="section">
+                    {{range .Questions}}
+                        <div class="question">
+                            <label>{{$number = Inc $number}}{{$questionLabel := .Label}}{{$number}}) {{$questionLabel}}</label>
+                            <div class="options">
+                                {{range .Choises}}
+                                    <label><input type="radio" name="{{$questionLabel}}" value="{{.Value}}">{{.Label}}</label>
+                                {{end}}
+                            </div>
+                            <div class="error-message">Пожалуйста, выберите один из вариантов</div>
+                        </div>
+                    {{end}}
+                </div>
+
+            {{end}}
+
+        </div>
+
+        <button type="submit" id="submit">Отправить 🔬‍</button>
+
+    </form>
+
+    <button class="floating-button" onclick="handleFloatingButton()">🥼</button>
+
+</div>
+
+<script>
+    function validateForm() {
+        let questions = document.querySelectorAll(
+            'div[class="question"]'
+        )
+        let formIsValid = true
+
+        questions.forEach(function (question) {
+            let errorMessage = question.querySelector('.error-message')
+            let questionIsValid = false
+
+            let radios = question.querySelectorAll(
+                'input[type="radio"]'
+            )
+
+            radios.forEach(function (radio) {
+                if (radio.checked) {
+                    questionIsValid = true
+                }
+            })
+
+            if (questionIsValid) {
+                errorMessage.style.display = 'none'
+            } else {
+                errorMessage.style.display = 'block'
+                formIsValid = false
+            }
+        })
+        return formIsValid
+    }
+
+    function calculateScore() {
+        let questions = document.querySelectorAll(
+            'div[class="question"]'
+        )
+        let score = 0.0
+
+        questions.forEach(function (question) {
+            let radios = question.querySelectorAll(
+                'input[type="radio"]'
+            )
+
+            radios.forEach(function (radio) {
+                if (radio.checked) {
+                    score += parseFloat(radio.value)
+                }
+            })
+        })
+
+        return score
+    }
+
+    function calculateResult(score) {
+        if (score <= 3) {
+            return "Благоприятный"
+        }
+        if (score >= 4 && score <= 6) {
+            return "Средний"
+        }
+        return "Неблагоприятный"
+    }
+
+    async function createPrognosis(score) {
+        let result = calculateResult(score)
+
+        try {
+            let resp = await fetch("/prognosis/create", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "score": score,
+                        "result": result,
+                    })
+            })
+
+            if (!resp.ok) {
+                console.error(`/prognosis/create: response status: ${resp.status}`)
+            }
+
+            return await resp.json()
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function processForm(event) {
+        event.preventDefault();
+
+        if (!validateForm()) {
+            return false
+        }
+
+        let score = calculateScore()
+        let resp = await createPrognosis(score)
+
+        let result = resp['prognosis']['result']
+
+        let submit = document.getElementById("submit")
+
+        const content = `
+            <div class="result">
+                Прогноз: ${result}
+            </div>
+        `
+        submit.insertAdjacentHTML('afterend', content)
+        submit.remove()
+
+        return true
+    }
+
+    async function handleFloatingButton() {
+        window.location.href = '/admin'
+    }
+</script>
+
+</body>
+</html>

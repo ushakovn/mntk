@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="icon" href="assets/favicon.svg"/>
+    <title>Страница администратора</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/assets/background.svg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            background-color: #bfcfde;
+            /* Центрирование */
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            /* Без центрирования */
+            /*margin: 30px;*/
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h5 {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            font-size: 14px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #95abc3;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #7d9bb7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <h5>Страница администратора 🥼️</h5>
+    <hr>
+
+    <button type="button" onclick="handlePrognosisForm()">
+        Перейти на страницу с опросом
+    </button>
+
+    <button type="button" onclick="handlePrognosisTable()">
+        Отчет с результатами опросов 📑
+    </button>
+
+    <button type="button" onclick="handleChangeCreds()">
+        Смена пароля администратора 🔐
+    </button>
+
+    <button type="button" onclick="handleLogout()">
+        Выход из учетной записи
+    </button>
+</div>
+
+<script>
+    async function fetchPrognosisTable() {
+        try {
+            let resp = await fetch("/prognosis/list", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'text/html'
+                },
+                body: JSON.stringify(
+                    {
+                        "sort_order": "desc",
+                        "sort_field": "created_at"
+                    })
+            })
+
+            if (!resp.ok) {
+                console.error(`/prognosis/list: response status: ${resp.status}`)
+            }
+
+            return await resp.text()
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function handlePrognosisTable() {
+        let table = await fetchPrognosisTable()
+        document.write(table)
+    }
+
+    async function handleChangeCreds() {
+       window.location.href = '/admin/password'
+    }
+
+    async function handleLogout() {
+        try {
+            await fetch("/admin/logout", {
+                method: 'POST',
+            })
+        } catch (error) {
+            console.error(error.message);
+        }
+        window.location.href = '/admin'
+    }
+
+    async function handlePrognosisForm() {
+        window.location.href = '/prognosis'
+    }
+</script>
+
+</body>
+</html>
